@@ -8,7 +8,7 @@
         body { 
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             text-align: center; 
-            background: #0f0c29; /* Màu tối huyền bí */
+            background: #0f0c29; 
             background: linear-gradient(to bottom, #24243e, #302b63, #0f0c29);
             color: #ffffff;
             padding-top: 50px; 
@@ -18,7 +18,7 @@
         }
         .container { 
             background: rgba(255, 255, 255, 0.05); 
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             padding: 40px; 
             border-radius: 20px; 
             display: inline-block; 
@@ -28,14 +28,11 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
         
-        /* Trang chào mừng */
         #welcome-screen { display: block; }
         .welcome-img { width: 100%; border-radius: 15px; margin-bottom: 25px; border: 1px solid #4facfe; }
 
-        /* Khu vực câu hỏi */
         #quiz-box { display: none; }
         
-        /* Khu vực kết quả troll */
         #result-area { display: none; margin-top: 10px; padding: 10px; }
         #troll-image { 
             border: 5px solid #00f2fe; 
@@ -43,17 +40,18 @@
             max-width: 100%; 
             height: auto; 
             margin-top: 20px; 
-            box-shadow: 0 0 20px #4facfe; 
+            box-shadow: 0 0 25px #4facfe; 
         }
         
+        .btn-group { margin-top: 30px; }
         button { 
-            padding: 15px 35px; 
+            padding: 15px 30px; 
             cursor: pointer; 
             background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
             color: white; 
             border: none; 
             border-radius: 30px; 
-            font-size: 16px; 
+            font-size: 15px; 
             margin: 10px; 
             transition: 0.3s; 
             font-weight: bold; 
@@ -72,50 +70,53 @@
             border-radius: 10px; 
             display: none;
             border-left: 5px solid #ff4b2b;
+            animation: blink 1s infinite;
         }
 
         .scanning-text {
             font-family: 'Courier New', Courier, monospace;
             color: #00f2fe;
             margin-bottom: 20px;
+            font-weight: bold;
         }
 
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
         h1 { font-size: 22px; margin-bottom: 10px; letter-spacing: 2px; color: #4facfe; }
         p { color: #ccc; line-height: 1.6; }
     </style>
 </head>
 <body>
 
-<!-- 1. GIAO DIỆN CHÀO MỪNG CHUYÊN NGHIỆP -->
+<!-- 1. TRANG CHÀO MỪNG -->
 <div class="container" id="welcome-screen">
-    <h1>HỆ THỐNG PHÂN TÍCH NHÂN DẠNG AI</h1>
-    <p>Sử dụng thuật toán học sâu (Deep Learning) để phân tích tần số sinh học và tìm kiếm dữ liệu khớp lệnh.</p>
-    <img src="https://i.postimg.cc/Y9Q5p4Kw/889e0ff6-b8e2-44f5-a6ea-5d96b874e98e.jpg" class="welcome-img" alt="AI Scan">
+    <h1>AI IDENTITY ANALYSIS</h1>
+    <p>Hệ thống sử dụng Big Data để quét tần số sinh học và phân tích nhân diện tương thích 2026.</p>
+    <img src="https://i.postimg.cc/Y9Q5p4Kw/889e0ff6-b8e2-44f5-a6ea-5d96b874e98e.jpg" class="welcome-img" alt="AI Interface">
     <br>
-    <button onclick="startQuiz()">Bắt đầu quét ID ✨</button>
+    <button onclick="startQuiz()">Khởi động hệ thống ✨</button>
 </div>
 
-<!-- 2. BỘ CÂU HỎI "HACK NÃO" -->
+<!-- 2. KHU VỰC CÂU HỎI BIẾN ĐỔI -->
 <div class="container" id="quiz-box">
     <div class="scanning-text" id="status-text">STATUS: CHỜ LỆNH...</div>
     <hr style="border: 0.5px solid rgba(255,255,255,0.1);">
-    <h2 id="question" style="margin-top: 25px; font-size: 20px;">Bước 1: Bạn thường đưa ra quyết định dựa trên Logic hay Trực giác?</h2>
-    <div style="margin-top: 30px;">
-        <button onclick="nextStep()">LOGIC (Dữ liệu)</button>
-        <button onclick="nextStep()">TRỰC GIÁC (Cảm xúc)</button>
+    <h2 id="question" style="margin-top: 25px; font-size: 19px;">Bước 1: Bạn thường xử lý thông tin dựa trên cơ sở nào?</h2>
+    <div class="btn-group" id="btn-container">
+        <button onclick="nextStep()">Dữ liệu Logic</button>
+        <button onclick="nextStep()">Phán đoán Trực giác</button>
     </div>
 </div>
 
-<!-- 3. KẾT QUẢ TROLL (Bất ngờ và ức chế) -->
+<!-- 3. KẾT QUẢ TROLL -->
 <div id="result-area">
-    <h1 style="color: #ff4b2b;">CORE DATA MATCH FOUND!</h1>
-    <h3 style="color: #fff;">Hệ thống đã tìm thấy đối tượng có tần số sinh học khớp 99.99%:</h3>
+    <h1 style="color: #ff4b2b;">PHÂN TÍCH HOÀN TẤT!</h1>
+    <h3 style="color: #fff;">Đối tượng có chỉ số tương thích DNA cao nhất với bạn (99.9%):</h3>
     
     <img src="https://i.postimg.cc/qqhpXJWx/Gemini-Generated-Image-i8flxmi8flxmi8fl.png" id="troll-image" alt="Match result">
     
-    <div class="warning" id="lock-msg">ĐANG ĐỒNG BỘ HÓA DỮ LIỆU LÊN CLOUD... VUI LÒNG GIỮ NGUYÊN TRÌNH DUYỆT (60s)</div>
+    <div class="warning" id="lock-msg">ĐANG ĐỒNG BỘ DỮ LIỆU... VUI LÒNG GIỮ NGUYÊN MÀN HÌNH (60s)</div>
     <p id="final-troll" style="display:none; font-size: 24px; font-weight: bold; margin-top: 20px; color: #ff4b2b;">
-        MỘT CẶP TRỜI SINH! ĐỪNG TÌM CÁCH THOÁT 😂🤡
+        TƯỚNG PHU THÊ LẮM, CHÚC MỪNG NHÉ! 😂🤡
     </p>
 </div>
 
@@ -129,7 +130,7 @@
         document.getElementById('status-text').innerText = "STATUS: ĐANG TRUY XUẤT...";
     }
 
-    // Chặn tắt trang
+    // Chặn phím tắt và đóng tab
     window.onbeforeunload = function() {
         if (timeLeft > 0 && document.getElementById('result-area').style.display === 'block') {
             return "Cảnh báo: Tiến trình lưu dữ liệu AI chưa hoàn tất!";
@@ -139,14 +140,23 @@
     function nextStep() {
         const qElem = document.getElementById('question');
         const statusElem = document.getElementById('status-text');
+        const btnContainer = document.getElementById('btn-container');
         
         if (step === 1) {
             statusElem.innerText = "STATUS: ĐANG QUÉT TẦN SỐ...";
-            qElem.innerText = "Bước 2: Bạn có tin rằng mỗi người đều có một 'định mệnh' đã được lập trình sẵn?";
+            qElem.innerText = "Bước 2: Hệ thống ghi nhận xu hướng tính cách. Bạn ưu tiên giá trị nào?";
+            btnContainer.innerHTML = `
+                <button onclick="nextStep()">Sự ổn định thực tế</button>
+                <button onclick="nextStep()">Sáng tạo đột phá</button>
+            `;
             step++;
         } else if (step === 2) {
             statusElem.innerText = "STATUS: KHỚP LỆNH DỮ LIỆU...";
-            qElem.innerText = "Bước cuối: Bạn đã sẵn sàng để xem kết quả phân tích nhận diện chưa?";
+            qElem.innerText = "Bước cuối: Phân tích hoàn tất 98%. Bạn đã sẵn sàng truy xuất hình ảnh đối tượng?";
+            btnContainer.innerHTML = `
+                <button onclick="nextStep()">Xác nhận truy xuất</button>
+                <button onclick="nextStep()">Xem kết quả ngay</button>
+            `;
             step++;
         } else {
             startTroll();
@@ -167,21 +177,26 @@
                 window.onbeforeunload = null; 
                 document.getElementById('lock-msg').style.background = "#00f2fe";
                 document.getElementById('lock-msg').style.color = "#000";
-                document.getElementById('lock-msg').innerText = "ĐÃ ĐỒNG BỘ XONG! GIỜ THÌ BIẾN ĐI ĐỒ NGỐC 😂";
+                document.getElementById('lock-msg').innerText = "ĐỒNG BỘ XONG! GIỜ THÌ BIẾN ĐI ĐỒ NGỐC 😂";
                 document.getElementById('final-troll').style.display = 'block';
             }
         }, 1000);
     }
 
-    // Chặn phím tắt
     window.addEventListener('keydown', function(e) {
         if (document.getElementById('result-area').style.display === 'block' && timeLeft > 0) {
             if (e.key === 'F5' || (e.ctrlKey && e.key === 'r') || e.key === 'Escape') {
                 e.preventDefault();
-                alert("Hệ thống AI đang khóa, đừng cố gắng vô ích! 😂");
+                alert("Hệ thống đang đồng bộ ảnh cưới, đừng vội thế! 😂");
             }
         }
     });
+
+    // Chặn nút Back
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
 </script>
 
 </body>
