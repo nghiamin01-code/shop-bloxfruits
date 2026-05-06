@@ -2,122 +2,133 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AI Identity Analysis v2.0</title>
     <style>
+        * { box-sizing: border-box; }
         body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
             text-align: center; 
             background: #0f0c29; 
             background: linear-gradient(to bottom, #24243e, #302b63, #0f0c29);
             color: #ffffff;
-            padding-top: 50px; 
-            overflow: hidden; 
             margin: 0; 
+            padding: 20px 10px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
         .container { 
             background: rgba(255, 255, 255, 0.05); 
             backdrop-filter: blur(15px);
-            padding: 40px; 
+            -webkit-backdrop-filter: blur(15px);
+            padding: 25px 15px; 
             border-radius: 20px; 
-            display: inline-block; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
-            width: 90%; 
-            max-width: 550px; 
+            width: 100%; 
+            max-width: 500px; 
             border: 1px solid rgba(255,255,255,0.1);
         }
         
-        #welcome-screen { display: block; }
-        .welcome-img { width: 100%; border-radius: 15px; margin-bottom: 25px; border: 1px solid #4facfe; }
+        h1 { font-size: 20px; color: #4facfe; letter-spacing: 1px; margin-bottom: 15px; }
+        p { color: #ccc; font-size: 14px; line-height: 1.5; }
 
-        #quiz-box { display: none; }
-        
-        #result-area { display: none; margin-top: 10px; padding: 10px; }
-        #troll-image { 
-            border: 5px solid #00f2fe; 
-            border-radius: 15px; 
-            max-width: 100%; 
-            height: auto; 
-            margin-top: 20px; 
-            box-shadow: 0 0 25px #4facfe; 
+        .welcome-img, #troll-image { 
+            width: 100%; 
+            max-width: 350px;
+            border-radius: 12px; 
+            margin: 15px auto;
+            display: block;
+            border: 2px solid #4facfe;
         }
-        
-        .btn-group { margin-top: 30px; }
+
+        #troll-image { border: 4px solid #ff4b2b; box-shadow: 0 0 20px #ff4b2b; }
+
+        .btn-group { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            margin-top: 20px; 
+        }
+
         button { 
-            padding: 15px 30px; 
+            padding: 15px 20px; 
             cursor: pointer; 
             background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
             color: white; 
             border: none; 
-            border-radius: 30px; 
+            border-radius: 12px; 
             font-size: 15px; 
-            margin: 10px; 
-            transition: 0.3s; 
             font-weight: bold; 
             text-transform: uppercase;
-            letter-spacing: 1px;
+            transition: 0.3s;
+            width: 100%;
         }
-        button:hover { transform: scale(1.05); box-shadow: 0 0 15px #4facfe; }
         
+        button:active { transform: scale(0.95); }
+
+        .scanning-text {
+            font-family: monospace;
+            color: #00f2fe;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
         .warning { 
             color: #ff4b2b; 
             font-weight: bold; 
-            margin-top: 20px; 
-            font-size: 1em; 
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px; 
-            border-radius: 10px; 
+            margin-top: 15px; 
+            font-size: 13px; 
+            background: rgba(255, 75, 43, 0.1);
+            padding: 12px; 
+            border-radius: 8px; 
+            border-left: 4px solid #ff4b2b;
             display: none;
-            border-left: 5px solid #ff4b2b;
-            animation: blink 1s infinite;
         }
 
-        .scanning-text {
-            font-family: 'Courier New', Courier, monospace;
-            color: #00f2fe;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
+        #result-area { display: none; width: 100%; }
 
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-        h1 { font-size: 22px; margin-bottom: 10px; letter-spacing: 2px; color: #4facfe; }
-        p { color: #ccc; line-height: 1.6; }
+        /* Tối ưu cho màn hình nhỏ hơn */
+        @media (max-width: 380px) {
+            h1 { font-size: 18px; }
+            button { padding: 12px; font-size: 13px; }
+        }
     </style>
 </head>
 <body>
 
-<!-- 1. TRANG CHÀO MỪNG -->
-<div class="container" id="welcome-screen">
-    <h1>AI IDENTITY ANALYSIS</h1>
-    <p>Hệ thống sử dụng Big Data để quét tần số sinh học và phân tích nhân diện tương thích 2026.</p>
-    <img src="https://i.postimg.cc/Y9Q5p4Kw/889e0ff6-b8e2-44f5-a6ea-5d96b874e98e.jpg" class="welcome-img" alt="AI Interface">
-    <br>
-    <button onclick="startQuiz()">Khởi động hệ thống ✨</button>
-</div>
-
-<!-- 2. KHU VỰC CÂU HỎI BIẾN ĐỔI -->
-<div class="container" id="quiz-box">
-    <div class="scanning-text" id="status-text">STATUS: CHỜ LỆNH...</div>
-    <hr style="border: 0.5px solid rgba(255,255,255,0.1);">
-    <h2 id="question" style="margin-top: 25px; font-size: 19px;">Bước 1: Bạn thường xử lý thông tin dựa trên cơ sở nào?</h2>
-    <div class="btn-group" id="btn-container">
-        <button onclick="nextStep()">Dữ liệu Logic</button>
-        <button onclick="nextStep()">Phán đoán Trực giác</button>
+<div class="container" id="main-card">
+    <!-- TRANG CHÀO MỪNG -->
+    <div id="welcome-screen">
+        <h1>AI IDENTITY ANALYSIS</h1>
+        <p>Hệ thống AI sẽ quét sinh trắc học để tìm đối tượng tương thích DNA với bạn.</p>
+        <img src="https://i.postimg.cc/Y9Q5p4Kw/889e0ff6-b8e2-44f5-a6ea-5d96b874e98e.jpg" class="welcome-img">
+        <button onclick="startQuiz()">Bắt đầu quét ✨</button>
     </div>
-</div>
 
-<!-- 3. KẾT QUẢ TROLL -->
-<div id="result-area">
-    <h1 style="color: #ff4b2b;">PHÂN TÍCH HOÀN TẤT!</h1>
-    <h3 style="color: #fff;">Đối tượng có chỉ số tương thích DNA cao nhất với bạn (99.9%):</h3>
-    
-    <img src="https://i.postimg.cc/qqhpXJWx/Gemini-Generated-Image-i8flxmi8flxmi8fl.png" id="troll-image" alt="Match result">
-    
-    <div class="warning" id="lock-msg">ĐANG ĐỒNG BỘ DỮ LIỆU... VUI LÒNG GIỮ NGUYÊN MÀN HÌNH (60s)</div>
-    <p id="final-troll" style="display:none; font-size: 24px; font-weight: bold; margin-top: 20px; color: #ff4b2b;">
-        TƯỚNG PHU THÊ LẮM, CHÚC MỪNG NHÉ! 😂🤡
-    </p>
+    <!-- KHU VỰC CÂU HỎI -->
+    <div id="quiz-box" style="display: none;">
+        <div class="scanning-text" id="status-text">STATUS: CHỜ LỆNH...</div>
+        <h2 id="question" style="font-size: 18px; margin-bottom: 20px;">Bước 1: Bạn thường xử lý thông tin dựa trên cơ sở nào?</h2>
+        <div class="btn-group" id="btn-container">
+            <button onclick="nextStep()">Dữ liệu Logic</button>
+            <button onclick="nextStep()">Phán đoán Trực giác</button>
+        </div>
+    </div>
+
+    <!-- KẾT QUẢ TROLL -->
+    <div id="result-area">
+        <h1 style="color: #ff4b2b;">MATCH FOUND! (99.9%)</h1>
+        <p style="color: #fff;">Đối tượng khớp lệnh DNA cao nhất:</p>
+        <img src="https://i.postimg.cc/qqhpXJWx/Gemini-Generated-Image-i8flxmi8flxmi8fl.png" id="troll-image">
+        <div class="warning" id="lock-msg">ĐANG ĐỒNG BỘ DỮ LIỆU CLOUD... (60s)</div>
+        <p id="final-troll" style="display:none; font-size: 18px; font-weight: bold; color: #ff4b2b; margin-top: 10px;">
+            ĐẸP ĐÔI QUÁ, KHỎI CHỐI! 😂🤡
+        </p>
+    </div>
 </div>
 
 <script>
@@ -126,16 +137,9 @@
 
     function startQuiz() {
         document.getElementById('welcome-screen').style.display = 'none';
-        document.getElementById('quiz-box').style.display = 'inline-block';
+        document.getElementById('quiz-box').style.display = 'block';
         document.getElementById('status-text').innerText = "STATUS: ĐANG TRUY XUẤT...";
     }
-
-    // Chặn phím tắt và đóng tab
-    window.onbeforeunload = function() {
-        if (timeLeft > 0 && document.getElementById('result-area').style.display === 'block') {
-            return "Cảnh báo: Tiến trình lưu dữ liệu AI chưa hoàn tất!";
-        }
-    };
 
     function nextStep() {
         const qElem = document.getElementById('question');
@@ -144,7 +148,7 @@
         
         if (step === 1) {
             statusElem.innerText = "STATUS: ĐANG QUÉT TẦN SỐ...";
-            qElem.innerText = "Bước 2: Hệ thống ghi nhận xu hướng tính cách. Bạn ưu tiên giá trị nào?";
+            qElem.innerText = "Bước 2: Bạn ưu tiên giá trị nào trong cuộc sống?";
             btnContainer.innerHTML = `
                 <button onclick="nextStep()">Sự ổn định thực tế</button>
                 <button onclick="nextStep()">Sáng tạo đột phá</button>
@@ -152,10 +156,9 @@
             step++;
         } else if (step === 2) {
             statusElem.innerText = "STATUS: KHỚP LỆNH DỮ LIỆU...";
-            qElem.innerText = "Bước cuối: Phân tích hoàn tất 98%. Bạn đã sẵn sàng truy xuất hình ảnh đối tượng?";
+            qElem.innerText = "Bước cuối: Bạn đã sẵn sàng xem kết quả phân tích AI chưa?";
             btnContainer.innerHTML = `
                 <button onclick="nextStep()">Xác nhận truy xuất</button>
-                <button onclick="nextStep()">Xem kết quả ngay</button>
             `;
             step++;
         } else {
@@ -171,32 +174,20 @@
         const timer = setInterval(() => {
             timeLeft--;
             if (timeLeft > 0) {
-                document.getElementById('lock-msg').innerText = `HỆ THỐNG ĐANG KHÓA TRÌNH DUYỆT ĐỂ ĐỒNG BỘ DỮ LIỆU (${timeLeft}s)`;
+                document.getElementById('lock-msg').innerText = `HỆ THỐNG ĐANG KHÓA ĐỂ ĐỒNG BỘ (${timeLeft}s)`;
             } else {
                 clearInterval(timer);
-                window.onbeforeunload = null; 
                 document.getElementById('lock-msg').style.background = "#00f2fe";
                 document.getElementById('lock-msg').style.color = "#000";
-                document.getElementById('lock-msg').innerText = "ĐỒNG BỘ XONG! GIỜ THÌ BIẾN ĐI ĐỒ NGỐC 😂";
+                document.getElementById('lock-msg').innerText = "XONG! GIỜ THÌ THOÁT ĐI ĐỒ NGỐC 😂";
                 document.getElementById('final-troll').style.display = 'block';
             }
         }, 1000);
     }
 
-    window.addEventListener('keydown', function(e) {
-        if (document.getElementById('result-area').style.display === 'block' && timeLeft > 0) {
-            if (e.key === 'F5' || (e.ctrlKey && e.key === 'r') || e.key === 'Escape') {
-                e.preventDefault();
-                alert("Hệ thống đang đồng bộ ảnh cưới, đừng vội thế! 😂");
-            }
-        }
-    });
-
-    // Chặn nút Back
+    // Chặn Back nút trên điện thoại
     history.pushState(null, null, location.href);
-    window.onpopstate = function () {
-        history.go(1);
-    };
+    window.onpopstate = function () { history.go(1); };
 </script>
 
 </body>
