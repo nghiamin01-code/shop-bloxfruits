@@ -1,54 +1,171 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Shop Blox Fruits</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #fff;
-      text-align: center;
-      padding: 40px;
-    }
-    .box {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 12px;
-      max-width: 400px;
-      margin: auto;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 6px;
-      border: none;
-    }
-    button {
-      background: #22c55e;
-      font-weight: bold;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khám Phá Định Mệnh AI</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            background: #ffeaa7; 
+            padding-top: 50px; 
+            overflow: hidden; 
+            margin: 0; 
+            user-select: none;
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            display: inline-block; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+            width: 90%; 
+            max-width: 500px; 
+        }
+        
+        /* Trang chào mừng */
+        #welcome-screen { display: block; }
+        .welcome-img { width: 100%; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        /* Khu vực câu hỏi */
+        #quiz-box { display: none; }
+        
+        /* Khu vực kết quả troll */
+        #result-area { display: none; margin-top: 10px; padding: 10px; }
+        #troll-image { 
+            border: 8px solid #d63031; 
+            border-radius: 15px; 
+            max-width: 100%; 
+            height: auto; 
+            margin-top: 20px; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4); 
+        }
+        
+        button { 
+            padding: 15px 30px; 
+            cursor: pointer; 
+            background: #0984e3; 
+            color: white; 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 18px; 
+            margin: 10px; 
+            transition: 0.3s; 
+            font-weight: bold; 
+        }
+        button:hover { background: #74b9ff; transform: translateY(-3px); }
+        
+        .warning { 
+            color: #ffffff; 
+            font-weight: bold; 
+            margin-top: 20px; 
+            font-size: 1.1em; 
+            background: #d63031; 
+            padding: 15px; 
+            border-radius: 10px; 
+            display: none;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        h1 { color: #d63031; font-size: 24px; }
+    </style>
 </head>
 <body>
 
-  <h1>🛒 SHOP BLOX FRUITS</h1>
+<!-- 1. TRANG CHÀO MỪNG (Dùng link ảnh mới của bạn) -->
+<div class="container" id="welcome-screen">
+    <h1>Bói Tình Duyên AI 2024</h1>
+    <p>Hệ thống AI sẽ phân tích khuôn mặt và tính cách để tìm ra "định mệnh" của bạn.</p>
+    <img src="https://i.postimg.cc/Y9Q5p4Kw/889e0ff6-b8e2-44f5-a6ea-5d96b874e98e.jpg" class="welcome-img" alt="Welcome">
+    <br>
+    <button onclick="startQuiz()">Bắt đầu phân tích ngay ✨</button>
+</div>
 
-  <div class="box">
-    <select>
-      <option>Trái Light - 20k</option>
-      <option>Trái Magma - 30k</option>
-      <option>Trái Dragon - 550k</option>
-    </select>
+<!-- 2. KHU VỰC CÂU HỎI MỒI -->
+<div class="container" id="quiz-box">
+    <h1>Đang Phân Tích...</h1>
+    <hr>
+    <h2 id="question" style="color: #2d3436; margin-top: 20px;">Câu hỏi 1: Bạn có tự tin vào nhan sắc của mình không? 😎</h2>
+    <div style="margin-top: 30px;">
+        <button onclick="nextStep()">Rất tự tin</button>
+        <button onclick="nextStep()">Cũng tạm được</button>
+    </div>
+</div>
 
-    <input type="text" placeholder="Tên Roblox của bạn">
+<!-- 3. KHU VỰC HIỂN THỊ KẾT QUẢ TROLL (Ảnh con khỉ) -->
+<div id="result-area">
+    <h1>🔥 KẾT QUẢ GHÉP ĐÔI 🔥</h1>
+    <h3 style="color: #2d3436;">Chúc mừng! Bạn đã tìm thấy nửa kia hoàn hảo:</h3>
+    
+    <img src="https://i.postimg.cc/qqhpXJWx/Gemini-Generated-Image-i8flxmi8flxmi8fl.png" id="troll-image" alt="Kết quả ghép đôi">
+    
+    <div class="warning" id="lock-msg">HỆ THỐNG ĐANG LƯU HỒ SƠ... VUI LÒNG KHÔNG THOÁT (60s)</div>
+    <p id="final-troll" style="display:none; font-size: 22px; font-weight: bold; margin-top: 20px; color: #d63031;">
+        QUÁ ĐẸP ĐÔI! CHÚC HAI BẠN HẠNH PHÚC 😂🤡
+    </p>
+</div>
 
-    <button>Gửi đơn hàng</button>
+<script>
+    let step = 1;
+    let timeLeft = 60;
 
-    <p>📩 Admin sẽ liên hệ sau</p>
-  </div>
+    function startQuiz() {
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('quiz-box').style.display = 'inline-block';
+    }
+
+    // Chặn đóng tab
+    window.onbeforeunload = function() {
+        if (timeLeft > 0 && document.getElementById('result-area').style.display === 'block') {
+            return "Dữ liệu ghép đôi đang được lưu, bạn không nên thoát!";
+        }
+    };
+
+    function nextStep() {
+        const qElem = document.getElementById('question');
+        if (step === 1) {
+            qElem.innerText = "Câu hỏi 2: Bạn thích một người thông minh hay một người 'duyên dáng' giống bạn? 😏";
+            step++;
+        } else if (step === 2) {
+            qElem.innerText = "Câu cuối: Bạn đã sẵn sàng để xem dung nhan 'vợ/chồng' tương lai chưa?";
+            step++;
+        } else {
+            startTroll();
+        }
+    }
+
+    function startTroll() {
+        document.getElementById('quiz-box').style.display = 'none';
+        document.getElementById('result-area').style.display = 'block';
+        document.getElementById('lock-msg').style.display = 'block';
+
+        const timer = setInterval(() => {
+            timeLeft--;
+            if (timeLeft > 0) {
+                document.getElementById('lock-msg').innerText = `HỆ THỐNG ĐANG KHÓA TRÌNH DUYỆT ĐỂ LƯU KẾT QUẢ (${timeLeft}s)`;
+            } else {
+                clearInterval(timer);
+                window.onbeforeunload = null; 
+                document.getElementById('lock-msg').style.background = "#55efc4";
+                document.getElementById('lock-msg').style.color = "#000";
+                document.getElementById('lock-msg').innerText = "XONG! GIỜ THÌ THOÁT ĐI ĐỒ NGỐC 😂";
+                document.getElementById('final-troll').style.display = 'block';
+            }
+        }, 1000);
+    }
+
+    // Chặn phím tắt
+    window.addEventListener('keydown', function(e) {
+        if (document.getElementById('result-area').style.display === 'block' && timeLeft > 0) {
+            if (e.key === 'F5' || (e.ctrlKey && e.key === 'r') || e.key === 'Escape') {
+                e.preventDefault();
+                alert("Hệ thống đang khóa để lưu ảnh cưới của bạn! Đợi tí nhé 😂");
+            }
+        }
+    });
+</script>
 
 </body>
 </html>
